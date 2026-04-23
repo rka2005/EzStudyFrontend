@@ -102,15 +102,10 @@ export default function Contact() {
             <input
               type="text"
               name="first-name"
-<<<<<<< HEAD
               onFocus={() => setFocusedField('first')}
               onBlur={() => setFocusedField(null)}
               className="w-full rounded-xl border border-gray-200 dark:border-gray-700/50 px-4 py-3 text-gray-900 dark:text-white bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm shadow-sm focus:ring-2 focus:ring-indigo-500/50 dark:focus:ring-indigo-500/30 focus:border-indigo-400 dark:focus:border-indigo-600 outline-none transition-all text-sm hover:border-gray-300 dark:hover:border-gray-600"
               placeholder="John"
-=======
-              className="mt-1 sm:mt-2 w-full rounded-xl border border-gray-300 dark:border-gray-700 px-3 sm:px-4 py-2.5 text-gray-900 dark:bg-gray-800 dark:text-white shadow-sm focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm"
-              placeholder="Example"
->>>>>>> upstream/master
             />
           </div>
           <div className="group relative">
@@ -120,15 +115,10 @@ export default function Contact() {
             <input
               type="text"
               name="last-name"
-<<<<<<< HEAD
               onFocus={() => setFocusedField('last')}
               onBlur={() => setFocusedField(null)}
               className="w-full rounded-xl border border-gray-200 dark:border-gray-700/50 px-4 py-3 text-gray-900 dark:text-white bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm shadow-sm focus:ring-2 focus:ring-indigo-500/50 dark:focus:ring-indigo-500/30 focus:border-indigo-400 dark:focus:border-indigo-600 outline-none transition-all text-sm hover:border-gray-300 dark:hover:border-gray-600"
               placeholder="Doe"
-=======
-              className="mt-1 sm:mt-2 w-full rounded-xl border border-gray-300 dark:border-gray-700 px-3 sm:px-4 py-2.5 text-gray-900 dark:bg-gray-800 dark:text-white shadow-sm focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm"
-              placeholder="Example"
->>>>>>> upstream/master
             />
           </div>
         </div>
@@ -141,15 +131,10 @@ export default function Contact() {
           <input
             type="email"
             name="email"
-<<<<<<< HEAD
             onFocus={() => setFocusedField('email')}
             onBlur={() => setFocusedField(null)}
             className="w-full rounded-xl border border-gray-200 dark:border-gray-700/50 px-4 py-3 text-gray-900 dark:text-white bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm shadow-sm focus:ring-2 focus:ring-indigo-500/50 dark:focus:ring-indigo-500/30 focus:border-indigo-400 dark:focus:border-indigo-600 outline-none transition-all text-sm hover:border-gray-300 dark:hover:border-gray-600"
             placeholder="john@example.com"
-=======
-            className="mt-1 sm:mt-2 w-full rounded-xl border border-gray-300 dark:border-gray-700 px-3 sm:px-4 py-2.5 text-gray-900 dark:bg-gray-800 dark:text-white shadow-sm focus:ring-2 focus:ring-indigo-600 dark:focus:ring-indigo-500 focus:border-transparent outline-none transition-all text-sm"
-            placeholder="example@example.com"
->>>>>>> upstream/master
           />
         </div>
 

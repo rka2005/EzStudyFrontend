@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
-import { Mail, Github, Globe, ArrowUpRight, Heart, Sparkles } from "lucide-react";
-=======
-import { Mail, Github, Linkedin, Globe, ArrowUpRight } from "lucide-react";
->>>>>>> upstream/master
+import { Mail, Github, Linkedin, ArrowUpRight, Heart, Sparkles } from "lucide-react";
 
 const Footer = () => {
   const [showGithubProfiles, setShowGithubProfiles] = useState(false);
@@ -48,17 +44,10 @@ const Footer = () => {
 
           {/* Contact Section */}
           <div className="flex flex-col items-center space-y-4">
-<<<<<<< HEAD
             <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-600 font-['Cambria_Math']">Get in Touch</h4>
             <a
               href="mailto:support@ezstudy.ai"
               className="group relative flex items-center gap-2.5 text-base font-medium transition-all duration-300 hover:text-indigo-500 dark:hover:text-indigo-400"
-=======
-            <h4 className="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Get in Touch</h4>
-            <a
-              href="mailto:support@ezstudy.ai"
-              className="group relative flex items-center gap-2 text-lg font-medium transition-all duration-300 hover:text-blue-500"
->>>>>>> upstream/master
             >
               <span className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800/50 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-950/30 group-hover:rotate-6 transition-all duration-300 group-hover:shadow-md group-hover:shadow-indigo-500/10">
                 <Mail size={18} className="group-hover:scale-110 transition-transform duration-300" />
@@ -77,40 +66,24 @@ const Footer = () => {
                 Privacy Policy
                 <span className="absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></span>
               </Link>
-<<<<<<< HEAD
               <Link to="/services" className="group relative hover:text-purple-500 dark:hover:text-purple-400 transition-colors duration-300">
                 Terms
                 <span className="absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></span>
               </Link>
             </div>
             <div className="flex gap-3">
-              <button className="group p-2.5 bg-gray-100 dark:bg-gray-800/50 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-indigo-500/10">
-                <Github size={16} className="group-hover:scale-110 transition-transform duration-300" />
-              </button>
-              <button className="group p-2.5 bg-gray-100 dark:bg-gray-800/50 hover:bg-purple-50 dark:hover:bg-purple-950/30 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-purple-500/10">
-                <Globe size={16} className="group-hover:scale-110 transition-transform duration-300" />
-=======
-              {!showGithubProfiles && !showLinkedinProfiles && (
-                <Link to="/services" className="hover:text-purple-500 transition-colors relative group">
-                  Terms
-                  <span className="absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
-                </Link>
-              )}
-            </div>
-            <div className="flex gap-4 relative">
               <button
                 onClick={() => setShowGithubProfiles(!showGithubProfiles)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all hover:-translate-y-1 relative z-10"
+                className="group p-2.5 bg-gray-100 dark:bg-gray-800/50 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-indigo-500/10"
               >
-                <Github size={18} />
+                <Github size={16} className="group-hover:scale-110 transition-transform duration-300" />
               </button>
 
               <button
                 onClick={() => setShowLinkedinProfiles(!showLinkedinProfiles)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all hover:-translate-y-1 relative z-10"
+                className="group p-2.5 bg-gray-100 dark:bg-gray-800/50 hover:bg-purple-50 dark:hover:bg-purple-950/30 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-purple-500/10"
               >
-                <Linkedin size={18} />
->>>>>>> upstream/master
+                <Linkedin size={16} className="group-hover:scale-110 transition-transform duration-300" />
               </button>
             </div>
           </div>
@@ -119,9 +92,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-gray-100 dark:border-gray-800/50 flex flex-col items-center space-y-2">
           <p className="text-xs tracking-wide text-gray-400 dark:text-gray-600 font-['Cambria_Math'] flex items-center gap-1.5">
-            &copy; {new Date().getFullYear()} EzStudyAI. Made with
-            <Heart size={12} className="text-rose-400 fill-rose-400 animate-pulse" />
-            for the future of education.
+            &copy; {new Date().getFullYear()} EzStudyAI. Powered by AI, designed for tomorrow’s minds.
           </p>
         </div>
       </div>
