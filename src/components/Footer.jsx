@@ -1,8 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import { Mail, Github, Globe, ArrowUpRight, Heart, Sparkles } from "lucide-react";
+=======
+import { Mail, Github, Linkedin, Globe, ArrowUpRight } from "lucide-react";
+>>>>>>> upstream/master
 
 const Footer = () => {
+  const [showGithubProfiles, setShowGithubProfiles] = useState(false);
+  const [showLinkedinProfiles, setShowLinkedinProfiles] = useState(false);
+
+  const githubProfiles = [
+    { name: "Atanu Saha", url: "https://github.com/Atanu2k4" },
+    { name: "Babin Bid", url: "https://github.com/KGFCH2" },
+    { name: "Rohit Kumar Adak", url: "https://github.com/rka2005" },
+  ];
+
+  const linkedinProfiles = [
+    { name: "Atanu Saha", url: "https://www.linkedin.com/in/atanusaha07/" },
+    { name: "Babin Bid", url: "https://www.linkedin.com/in/babinbid123/" },
+    { name: "Rohit Kumar Adak", url: "https://www.linkedin.com/in/rohit-adak-02b0342b3/" },
+  ];
   return (
     <footer className="relative bg-gray-50/50 dark:bg-[#060612] text-gray-600 dark:text-gray-400 py-14 px-6 transition-all duration-500 overflow-hidden">
       {/* Top gradient line */}
@@ -30,10 +48,17 @@ const Footer = () => {
 
           {/* Contact Section */}
           <div className="flex flex-col items-center space-y-4">
+<<<<<<< HEAD
             <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400 dark:text-gray-600 font-['Cambria_Math']">Get in Touch</h4>
             <a
               href="mailto:support@ezstudy.ai"
               className="group relative flex items-center gap-2.5 text-base font-medium transition-all duration-300 hover:text-indigo-500 dark:hover:text-indigo-400"
+=======
+            <h4 className="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Get in Touch</h4>
+            <a
+              href="mailto:support@ezstudy.ai"
+              className="group relative flex items-center gap-2 text-lg font-medium transition-all duration-300 hover:text-blue-500"
+>>>>>>> upstream/master
             >
               <span className="p-2 rounded-xl bg-gray-100 dark:bg-gray-800/50 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-950/30 group-hover:rotate-6 transition-all duration-300 group-hover:shadow-md group-hover:shadow-indigo-500/10">
                 <Mail size={18} className="group-hover:scale-110 transition-transform duration-300" />
@@ -52,6 +77,7 @@ const Footer = () => {
                 Privacy Policy
                 <span className="absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></span>
               </Link>
+<<<<<<< HEAD
               <Link to="/services" className="group relative hover:text-purple-500 dark:hover:text-purple-400 transition-colors duration-300">
                 Terms
                 <span className="absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 group-hover:w-full group-hover:left-0 rounded-full"></span>
@@ -63,6 +89,28 @@ const Footer = () => {
               </button>
               <button className="group p-2.5 bg-gray-100 dark:bg-gray-800/50 hover:bg-purple-50 dark:hover:bg-purple-950/30 rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:shadow-purple-500/10">
                 <Globe size={16} className="group-hover:scale-110 transition-transform duration-300" />
+=======
+              {!showGithubProfiles && !showLinkedinProfiles && (
+                <Link to="/services" className="hover:text-purple-500 transition-colors relative group">
+                  Terms
+                  <span className="absolute -bottom-0.5 left-1/2 w-0 h-0.5 bg-purple-500 transition-all duration-300 group-hover:w-full group-hover:left-0"></span>
+                </Link>
+              )}
+            </div>
+            <div className="flex gap-4 relative">
+              <button
+                onClick={() => setShowGithubProfiles(!showGithubProfiles)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all hover:-translate-y-1 relative z-10"
+              >
+                <Github size={18} />
+              </button>
+
+              <button
+                onClick={() => setShowLinkedinProfiles(!showLinkedinProfiles)}
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-all hover:-translate-y-1 relative z-10"
+              >
+                <Linkedin size={18} />
+>>>>>>> upstream/master
               </button>
             </div>
           </div>
@@ -77,6 +125,90 @@ const Footer = () => {
           </p>
         </div>
       </div>
+
+      {/* GitHub Profiles Modal */}
+      {showGithubProfiles && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center"
+          onClick={() => setShowGithubProfiles(false)}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white font-['Cambria_Math']">GitHub Profiles</h3>
+              <button
+                onClick={() => setShowGithubProfiles(false)}
+                className="text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 text-2xl hover:rotate-90 hover:scale-125 transition-all duration-300"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {githubProfiles.map((profile, index) => (
+                <a
+                  key={index}
+                  href={profile.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-4 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors group"
+                >
+                  <div className="flex items-center gap-3">
+                    <Github size={20} className="text-gray-700 dark:text-gray-300 group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-['Cambria_Math']">
+                      {profile.name}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* LinkedIn Profiles Modal */}
+      {showLinkedinProfiles && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center"
+          onClick={() => setShowLinkedinProfiles(false)}
+        >
+          <div
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white font-['Cambria_Math']">LinkedIn Profiles</h3>
+              <button
+                onClick={() => setShowLinkedinProfiles(false)}
+                className="text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 text-2xl hover:rotate-90 hover:scale-125 transition-all duration-300"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {linkedinProfiles.map((profile, index) => (
+                <a
+                  key={index}
+                  href={profile.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors group"
+                >
+                  <div className="flex items-center gap-3">
+                    <Linkedin size={20} className="text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors font-['Cambria_Math']">
+                      {profile.name}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 };

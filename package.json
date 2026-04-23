@@ -38,6 +38,7 @@
     "react-router-dom": "^6.19.0",
     "remark-gfm": "^4.0.1",
     "socket.io-client": "^4.8.1",
+    "styled-components": "^6.3.9",
     "tailwindcss": "^4.0.14",
     "tesseract.js": "^6.0.0",
     "uuid": "^11.1.0"
