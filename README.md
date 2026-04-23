@@ -1,5 +1,21 @@
 # EzStudy Frontend
 
+```text
+               ┌───────────────────────────────────────────────────────────────┐
+               │                                                               │
+               │  ███████╗███████╗███████╗████████╗██╗   ██╗██████╗ ██╗   ██╗  │
+               │  ██╔════╝╚══███╔╝██╔════╝╚══██╔══╝██║   ██║██╔══██╗╚██╗ ██╔╝  │
+               │  █████╗    ███╔╝ ███████╗   ██║   ██║   ██║██║  ██║ ╚████╔╝   │
+               │  ██╔══╝   ███╔╝  ╚════██║   ██║   ██║   ██║██║  ██║  ╚██╔╝    │
+               │  ███████╗███████╗███████║   ██║   ╚██████╔╝██████╔╝   ██║     │
+               │  ╚══════╝╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═════╝    ╚═╝     │
+               │                                                               │
+               │     AI-Powered Study Assistant with Chat, Notes & Quiz        │
+               │                                                               │
+               └───────────────────────────────────────────────────────────────┘
+```
+
+
 ## 📝 Description
 EzStudy is an AI-powered learning platform (React + Vite) that provides an intelligent learning console with AI-driven insights, personalized study plans, and document analysis.
 
