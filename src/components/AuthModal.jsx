@@ -13,6 +13,7 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
     const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: [] });
     const googleButtonRef = useRef(null);
     const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+    const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || '';
 
     // Password strength validation
     const validatePassword = (password) => {
@@ -76,6 +77,24 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
         return 'Strong';
     };
 
+    const saveAuthenticatedUser = (apiUser) => {
+        const sessionUser = {
+            id: apiUser.id,
+            name: apiUser.name || 'User',
+            email: apiUser.email || '',
+            emailMasked: apiUser.emailMasked || '',
+            provider: apiUser.provider || 'local',
+            authMethods: apiUser.authMethods || [],
+            profileImage: apiUser.profileImage || null,
+            createdAt: apiUser.createdAt || Date.now(),
+            lastLoginAt: apiUser.lastLoginAt || Date.now(),
+            activeChatId: apiUser.activeChatId || null,
+        };
+
+        localStorage.setItem('ezstudy_currentUser', JSON.stringify(sessionUser));
+        onAuthSuccess(sessionUser);
+    };
+
     // Compute SHA-256 hash for a string (returns hex)
     const hashString = async (str) => {
         const enc = new TextEncoder();
@@ -83,34 +102,6 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
         const hashBuffer = await crypto.subtle.digest('SHA-256', data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    };
-
-    const maskEmail = (em) => {
-        try {
-            const [local, domain] = em.split('@');
-            const localMasked = local.length > 1 ? local[0] + '***' : '***';
-            const domainParts = domain ? domain.split('.') : [];
-            const domainMasked = domainParts.length ? domainParts[0][0] + '***.' + domainParts.slice(1).join('.') : '***';
-            return `${localMasked}@${domainMasked}`;
-        } catch (e) {
-            return '***@***.***';
-        }
-    };
-
-    const decodeJwtPayload = (token) => {
-        try {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(
-                atob(base64)
-                    .split('')
-                    .map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`)
-                    .join('')
-            );
-            return JSON.parse(jsonPayload);
-        } catch (err) {
-            return null;
-        }
     };
 
     const handleGoogleCredential = async (credentialResponse) => {
@@ -122,22 +113,20 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
                 throw new Error('Google sign in failed. Missing credential.');
             }
 
-            const payload = decodeJwtPayload(token);
-            if (!payload?.email) {
-                throw new Error('Could not read your Google account details.');
+            const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ credential: token }),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Google authentication failed');
             }
 
-            const safeCurrent = {
-                id: `g_${payload.sub || Date.now()}`,
-                name: payload.name || payload.given_name || 'Google User',
-                email: maskEmail((payload.email || '').toLowerCase()),
-                profileImage: payload.picture || null,
-                provider: 'google',
-                createdAt: Date.now(),
-            };
-
-            localStorage.setItem('ezstudy_currentUser', JSON.stringify(safeCurrent));
-            onAuthSuccess(safeCurrent);
+            saveAuthenticatedUser(data.user || data);
         } catch (err) {
             console.error('Google auth error:', err);
             setError(err.message || 'Google authentication failed. Please try again.');
@@ -194,67 +183,39 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
         setError('');
         setIsLoading(true);
 
-        // Load existing users (stored with hashes)
-        let users = [];
-        try {
-            users = JSON.parse(localStorage.getItem('ezstudy_users') || '[]');
-        } catch (err) {
-            console.error("Error parsing users list:", err);
-            users = [];
-        }
-
-        // small delay to keep UX consistent
-        await new Promise(r => setTimeout(r, 400));
-
         try {
             const emailNormalized = (email || '').trim().toLowerCase();
-            const emailHash = await hashString(emailNormalized);
             const passwordHash = await hashString(password || '');
 
             if (mode === 'signup') {
-                if (users.find(u => u.emailHash === emailHash)) {
-                    setError('User already exists with this email');
-                    setIsLoading(false);
-                    return;
-                }
-
-                // Validate password strength
                 const strength = validatePassword(password);
                 if (strength.score < 4) {
-                    setError('Password is too weak. Please ensure it meets all requirements.');
-                    setIsLoading(false);
-                    return;
-                }
-
-                const newUser = {
-                    id: `u_${Date.now()}`,
-                    name: name || emailNormalized.split('@')[0],
-                    emailHash,
-                    passwordHash,
-                    createdAt: Date.now()
-                };
-
-                users.push(newUser);
-                // Persist only hashes and non-PII identifiers
-                localStorage.setItem('ezstudy_users', JSON.stringify(users));
-
-                // Store a sanitized current user for UI (masked email, no raw credentials)
-                const safeCurrent = { id: newUser.id, name: newUser.name, email: maskEmail(emailNormalized), createdAt: newUser.createdAt };
-                localStorage.setItem('ezstudy_currentUser', JSON.stringify(safeCurrent));
-                onAuthSuccess(safeCurrent);
-            } else {
-                const user = users.find(u => u.emailHash === emailHash && u.passwordHash === passwordHash);
-                if (user) {
-                    const safeCurrent = { id: user.id, name: user.name, email: maskEmail(emailNormalized), createdAt: user.createdAt };
-                    localStorage.setItem('ezstudy_currentUser', JSON.stringify(safeCurrent));
-                    onAuthSuccess(safeCurrent);
-                } else {
-                    setError('Invalid email or password');
+                    throw new Error('Password is too weak. Please ensure it meets all requirements.');
                 }
             }
+
+            const endpoint = mode === 'signup' ? '/api/auth/signup' : '/api/auth/signin';
+            const payload = mode === 'signup'
+                ? { name: name.trim(), email: emailNormalized, passwordHash }
+                : { email: emailNormalized, passwordHash };
+
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || 'Authentication failed');
+            }
+
+            saveAuthenticatedUser(data.user || data);
         } catch (err) {
             console.error('Auth error', err);
-            setError('An error occurred during authentication');
+            setError(err.message || 'An error occurred during authentication');
         } finally {
             setIsLoading(false);
         }

@@ -59,6 +59,7 @@ const SidebarLink = ({ active, onClick, icon, label, collapsed }) => (
 const LearningPage = ({ user, onLogout }) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("chat"); // 'chat', 'docs', 'stats'
+  const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || '';
 
   // Use user-specific keys for localStorage to ensure separation
   // Prefer non-sensitive `id` when available. Do NOT use email/username (PII) or credentials.
@@ -107,6 +108,7 @@ const LearningPage = ({ user, onLogout }) => {
 
   const [chatHistory, setChatHistory] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
+  const [isHydratingChats, setIsHydratingChats] = useState(true);
 
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -204,55 +206,95 @@ const LearningPage = ({ user, onLogout }) => {
     return "New conversation";
   };
 
-  // Load chat history and messages from localStorage on component mount
+  // Load chat history from backend on component mount
   useEffect(() => {
-    try {
-      const savedChatHistory = localStorage.getItem(CHAT_HISTORY_KEY);
-      const savedFiles = localStorage.getItem(FILES_KEY);
-      if (savedFiles) {
-        try {
-          const parsed = JSON.parse(savedFiles);
-          if (Array.isArray(parsed)) setStoredFiles(parsed);
-        } catch (e) {
-          console.error('Error parsing stored files:', e);
-        }
+    let cancelled = false;
+
+    const loadChats = async () => {
+      if (!user?.id) {
+        setIsHydratingChats(false);
+        return;
       }
-      if (savedChatHistory) {
-        const restoredHistory = JSON.parse(savedChatHistory);
 
-        if (Array.isArray(restoredHistory) && restoredHistory.length > 0) {
-          setChatHistory(restoredHistory);
+      setIsHydratingChats(true);
 
-          const activeChatId = localStorage.getItem(ACTIVE_CHAT_KEY);
-          const chatToLoad = restoredHistory.find((chat) => chat.id === activeChatId) || restoredHistory[0];
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/chats/${user.id}`);
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Failed to load chats (${response.status})`);
+        }
 
-          if (chatToLoad) {
-            setCurrentChatId(chatToLoad.id);
-            setMessages(Array.isArray(chatToLoad.messages) ? chatToLoad.messages : []);
+        const data = await response.json();
+        const restoredHistory = Array.isArray(data.chats) && data.chats.length > 0 ? data.chats : [getDefaultChat()];
+
+        if (cancelled) return;
+
+        setChatHistory(restoredHistory);
+
+        const activeChatId = data.activeChatId || restoredHistory[0]?.id;
+        const chatToLoad = restoredHistory.find((chat) => chat.id === activeChatId) || restoredHistory[0];
+
+        if (chatToLoad) {
+          setCurrentChatId(chatToLoad.id);
+          setMessages(Array.isArray(chatToLoad.messages) ? chatToLoad.messages : []);
+        }
+      } catch (error) {
+        console.error("Error loading chat history from backend:", error);
+
+        try {
+          const savedFiles = localStorage.getItem(FILES_KEY);
+          if (savedFiles) {
+            const parsed = JSON.parse(savedFiles);
+            if (Array.isArray(parsed)) setStoredFiles(parsed);
           }
-        } else {
-          // Empty array in storage, initialize
+
+          const savedChatHistory = localStorage.getItem(CHAT_HISTORY_KEY);
+          if (savedChatHistory) {
+            const restoredHistory = JSON.parse(savedChatHistory);
+
+            if (Array.isArray(restoredHistory) && restoredHistory.length > 0) {
+              setChatHistory(restoredHistory);
+
+              const activeChatId = localStorage.getItem(ACTIVE_CHAT_KEY);
+              const chatToLoad = restoredHistory.find((chat) => chat.id === activeChatId) || restoredHistory[0];
+
+              if (chatToLoad) {
+                setCurrentChatId(chatToLoad.id);
+                setMessages(Array.isArray(chatToLoad.messages) ? chatToLoad.messages : []);
+              }
+            } else {
+              const initialChat = getDefaultChat();
+              setChatHistory([initialChat]);
+              setCurrentChatId(initialChat.id);
+              setMessages(initialChat.messages);
+            }
+          } else {
+            const initialChat = getDefaultChat();
+            setChatHistory([initialChat]);
+            setCurrentChatId(initialChat.id);
+            setMessages(initialChat.messages);
+          }
+        } catch (fallbackError) {
+          console.error("Error restoring chat history from fallback storage:", fallbackError);
           const initialChat = getDefaultChat();
           setChatHistory([initialChat]);
           setCurrentChatId(initialChat.id);
           setMessages(initialChat.messages);
         }
-      } else {
-        // No history for this user, create first chat
-        const initialChat = getDefaultChat();
-        setChatHistory([initialChat]);
-        setCurrentChatId(initialChat.id);
-        setMessages(initialChat.messages);
+      } finally {
+        if (!cancelled) {
+          setIsHydratingChats(false);
+        }
       }
-    } catch (error) {
-      console.error("Error restoring chat history:", error);
-      // Fallback in case of parse error
-      const initialChat = getDefaultChat();
-      setChatHistory([initialChat]);
-      setCurrentChatId(initialChat.id);
-      setMessages(initialChat.messages);
-    }
-  }, [CHAT_HISTORY_KEY]);
+    };
+
+    loadChats();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, API_BASE_URL, CHAT_HISTORY_KEY, ACTIVE_CHAT_KEY, FILES_KEY]);
 
   // Persist storedFiles metadata per user
   useEffect(() => {
@@ -263,27 +305,48 @@ const LearningPage = ({ user, onLogout }) => {
     }
   }, [storedFiles, FILES_KEY]);
 
-  // Save chat history to localStorage whenever it changes
+  // Save chat history to MongoDB whenever it changes
   useEffect(() => {
-    if (chatHistory.length > 0) {
-      try {
-        localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(chatHistory));
-      } catch (error) {
-        console.error("Error saving chat history:", error);
-      }
-    }
-  }, [chatHistory, CHAT_HISTORY_KEY]);
+    if (!user?.id || isHydratingChats) return;
 
-  // Save active chat ID to localStorage
-  useEffect(() => {
-    if (currentChatId) {
+    const timeoutId = setTimeout(async () => {
       try {
-        localStorage.setItem(ACTIVE_CHAT_KEY, currentChatId);
+        const response = await fetch(`${API_BASE_URL}/api/chats/${user.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chats: chatHistory,
+            activeChatId: currentChatId,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `Failed to save chats (${response.status})`);
+        }
+
+        localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(chatHistory));
+
+        if (currentChatId) {
+          localStorage.setItem(ACTIVE_CHAT_KEY, currentChatId);
+        }
       } catch (error) {
-        console.error("Error saving active chat ID:", error);
+        console.error("Error saving chat history to backend:", error);
+        try {
+          localStorage.setItem(CHAT_HISTORY_KEY, JSON.stringify(chatHistory));
+          if (currentChatId) {
+            localStorage.setItem(ACTIVE_CHAT_KEY, currentChatId);
+          }
+        } catch (fallbackError) {
+          console.error("Error saving chat history fallback:", fallbackError);
+        }
       }
-    }
-  }, [currentChatId, ACTIVE_CHAT_KEY]);
+    }, 450);
+
+    return () => clearTimeout(timeoutId);
+  }, [chatHistory, currentChatId, CHAT_HISTORY_KEY, ACTIVE_CHAT_KEY, API_BASE_URL, user?.id, isHydratingChats]);
 
   // Scroll to bottom when messages update
   useEffect(() => {
