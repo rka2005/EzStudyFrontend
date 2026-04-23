@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Lock, User, Eye, EyeOff, Loader2 } from 'lucide-react';
 
 const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) => {
@@ -9,7 +9,10 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: [] });
+    const googleButtonRef = useRef(null);
+    const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
     // Password strength validation
     const validatePassword = (password) => {
@@ -73,8 +76,6 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
         return 'Strong';
     };
 
-    if (!isOpen) return null;
-
     // Compute SHA-256 hash for a string (returns hex)
     const hashString = async (str) => {
         const enc = new TextEncoder();
@@ -95,6 +96,98 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
             return '***@***.***';
         }
     };
+
+    const decodeJwtPayload = (token) => {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64)
+                    .split('')
+                    .map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`)
+                    .join('')
+            );
+            return JSON.parse(jsonPayload);
+        } catch (err) {
+            return null;
+        }
+    };
+
+    const handleGoogleCredential = async (credentialResponse) => {
+        setError('');
+        setIsGoogleLoading(true);
+        try {
+            const token = credentialResponse?.credential;
+            if (!token) {
+                throw new Error('Google sign in failed. Missing credential.');
+            }
+
+            const payload = decodeJwtPayload(token);
+            if (!payload?.email) {
+                throw new Error('Could not read your Google account details.');
+            }
+
+            const safeCurrent = {
+                id: `g_${payload.sub || Date.now()}`,
+                name: payload.name || payload.given_name || 'Google User',
+                email: maskEmail((payload.email || '').toLowerCase()),
+                profileImage: payload.picture || null,
+                provider: 'google',
+                createdAt: Date.now(),
+            };
+
+            localStorage.setItem('ezstudy_currentUser', JSON.stringify(safeCurrent));
+            onAuthSuccess(safeCurrent);
+        } catch (err) {
+            console.error('Google auth error:', err);
+            setError(err.message || 'Google authentication failed. Please try again.');
+        } finally {
+            setIsGoogleLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (!isOpen) return;
+        if (!GOOGLE_CLIENT_ID) return;
+
+        const renderGoogleButton = () => {
+            if (!window.google?.accounts?.id || !googleButtonRef.current) return;
+
+            window.google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleGoogleCredential,
+            });
+
+            googleButtonRef.current.innerHTML = '';
+            window.google.accounts.id.renderButton(googleButtonRef.current, {
+                theme: 'outline',
+                size: 'large',
+                shape: 'pill',
+                text: mode === 'signup' ? 'signup_with' : 'signin_with',
+                logo_alignment: 'left',
+                width: 360,
+            });
+        };
+
+        if (window.google?.accounts?.id) {
+            renderGoogleButton();
+            return;
+        }
+
+        const existingScript = document.getElementById('google-identity-script');
+        if (existingScript) {
+            existingScript.addEventListener('load', renderGoogleButton, { once: true });
+            return () => existingScript.removeEventListener('load', renderGoogleButton);
+        }
+
+        const script = document.createElement('script');
+        script.id = 'google-identity-script';
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        script.onload = renderGoogleButton;
+        document.head.appendChild(script);
+    }, [isOpen, mode, GOOGLE_CLIENT_ID]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -166,6 +259,8 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
             setIsLoading(false);
         }
     };
+
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
@@ -287,6 +382,29 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
                                 mode === 'signin' ? 'Sign In' : 'Sign Up'
                             )}
                         </button>
+
+                        <div className="relative py-1">
+                            <div className="h-px bg-gray-200 dark:bg-gray-700"></div>
+                            <span className="absolute left-1/2 -translate-x-1/2 -top-2.5 px-2 text-xs text-gray-400 dark:text-gray-500 bg-white dark:bg-gray-800">
+                                or continue with
+                            </span>
+                        </div>
+
+                        {GOOGLE_CLIENT_ID ? (
+                            <div className="w-full flex flex-col items-center">
+                                <div ref={googleButtonRef} className="w-full flex justify-center" />
+                                {isGoogleLoading && (
+                                    <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1.5">
+                                        <Loader2 size={14} className="animate-spin" />
+                                        <span>Authenticating with Google...</span>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <p className="text-xs text-amber-600 dark:text-amber-400 text-center">
+                                Google auth is not configured. Set VITE_GOOGLE_CLIENT_ID in frontend env.
+                            </p>
+                        )}
                     </form>
 
                     <div className="mt-8 text-center">
