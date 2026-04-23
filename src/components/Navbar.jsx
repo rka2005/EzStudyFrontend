@@ -309,8 +309,8 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
 
   return (
     <>
-      <div className={`fixed top-2 sm:top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-3 w-[95%] sm:w-[90%] max-w-6xl z-50 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'}`}>
-        <nav className="bg-white/20 dark:bg-gray-800/20 backdrop-blur-3xl rounded-full px-3 sm:px-8 py-3 sm:py-4 flex items-center justify-between flex-1 font-[Rubik]">
+      <div className={`fixed top-2 sm:top-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2 sm:gap-3 w-[95%] sm:w-[90%] max-w-6xl z-50 transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'}`}>
+        <nav className="bg-white/30 dark:bg-gray-900/30 backdrop-blur-2xl rounded-2xl px-3 sm:px-8 py-2.5 sm:py-3.5 flex items-center justify-between flex-1 font-[Rubik] border border-white/20 dark:border-gray-700/30 shadow-lg shadow-black/5 dark:shadow-black/20">
           {/* Logo */}
           <Link
             to="/"
@@ -323,24 +323,24 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
                 navigate('/');
               }
             }}
-            className="text-xl sm:text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-red-400 text-transparent bg-clip-text tracking-wide drop-shadow hover:scale-105 transition-transform cursor-pointer font-['Cambria_Math']"
+            className="text-xl sm:text-2xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-rose-500 text-transparent bg-clip-text tracking-wide hover:scale-105 transition-transform cursor-pointer font-['Cambria_Math']"
           >
             EzStudy
           </Link>
 
           {/* Desktop Nav Links */}
           <div className="hidden md:flex space-x-6 lg:space-x-10">
-            <NavItem icon={<Home size={16} className="text-blue-500" />} text="Home" href="/" onClick={() => setIsMobileMenuOpen(false)} />
-            {user && <NavItem icon={<Bot size={16} className="text-indigo-500" />} text="AI Console" href="/ai-console" onClick={() => setIsMobileMenuOpen(false)} />}
-            <NavItem icon={<Info size={16} className="text-purple-500" />} text="About" href="/#about" onClick={() => setIsMobileMenuOpen(false)} />
-            <NavItem icon={<Phone size={16} className="text-red-400" />} text="Contact" href="/#contact" onClick={() => setIsMobileMenuOpen(false)} />
+            <NavItem icon={<Home size={15} className="text-blue-500" />} text="Home" href="/" onClick={() => setIsMobileMenuOpen(false)} />
+            {user && <NavItem icon={<Bot size={15} className="text-indigo-500" />} text="AI Console" href="/ai-console" onClick={() => setIsMobileMenuOpen(false)} />}
+            <NavItem icon={<Info size={15} className="text-purple-500" />} text="About" href="/#about" onClick={() => setIsMobileMenuOpen(false)} />
+            <NavItem icon={<Phone size={15} className="text-rose-400" />} text="Contact" href="/#contact" onClick={() => setIsMobileMenuOpen(false)} />
           </div>
 
           {/* Mobile Menu Button Container */}
           <div className="flex items-center space-x-2 md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-300 active:scale-90 hover:scale-110 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              className="p-2 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-300 active:scale-90 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               {isMobileMenuOpen ? <X size={20} className="text-gray-900 dark:text-white" /> : <Menu size={20} className="text-gray-900 dark:text-white" />}
             </button>
@@ -350,10 +350,12 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
                 ref={mobileProfileRef}
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                 aria-label="Open profile"
-                className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 flex items-center justify-center"
+                className="p-1 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 transition-all duration-300 flex items-center justify-center shadow-md shadow-purple-500/20 hover:shadow-lg hover:shadow-purple-500/30 hover:scale-105 active:scale-95"
               >
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white text-sm font-bold">
-                  {user.name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                <div className="w-7 h-7 rounded-full bg-white dark:bg-gray-900 flex items-center justify-center text-xs font-bold m-0.5">
+                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
+                    {user.name?.charAt(0) || user.email?.charAt(0) || 'U'}
+                  </span>
                 </div>
               </button>
             )}
@@ -361,10 +363,10 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="absolute top-full left-0 right-0 mt-2 mx-2 md:hidden bg-white/80 dark:bg-gray-800/80 backdrop-blur-3xl rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 space-y-2 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="absolute top-full left-0 right-0 mt-2 mx-2 md:hidden bg-white/80 dark:bg-gray-900/80 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/30 p-4 space-y-1 animate-in fade-in slide-in-from-top-4 duration-300">
               <button
                 onClick={() => handleNavigation('/')}
-                className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:scale-105 active:scale-95"
+                className="w-full text-left px-4 py-3 hover:bg-gray-100/80 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white active:scale-95"
               >
                 <Home size={18} className="text-blue-500" />
                 <span className="font-medium font-['Cambria_Math']">Home</span>
@@ -372,7 +374,7 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
               {user && (
                 <button
                   onClick={handleLearningNavigation}
-                  className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:scale-105 active:scale-95"
+                  className="w-full text-left px-4 py-3 hover:bg-gray-100/80 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white active:scale-95"
                 >
                   <Bot size={18} className="text-indigo-500" />
                   <span className="font-medium font-['Cambria_Math']">AI Console</span>
@@ -380,20 +382,20 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
               )}
               <button
                 onClick={() => handleNavigation('/#about')}
-                className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:scale-105 active:scale-95"
+                className="w-full text-left px-4 py-3 hover:bg-gray-100/80 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white active:scale-95"
               >
                 <Info size={18} className="text-purple-500" />
                 <span className="font-medium font-['Cambria_Math']">About</span>
               </button>
               <button
                 onClick={() => handleNavigation('/#contact')}
-                className="w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:scale-105 active:scale-95"
+                className="w-full text-left px-4 py-3 hover:bg-gray-100/80 dark:hover:bg-gray-800/50 rounded-xl transition-all duration-300 flex items-center space-x-3 text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white active:scale-95"
               >
-                <Phone size={18} className="text-red-400" />
+                <Phone size={18} className="text-rose-400" />
                 <span className="font-medium font-['Cambria_Math']">Contact</span>
               </button>
 
-              <div className="pt-2 border-t border-gray-100 dark:border-gray-700 mt-2 flex flex-col space-y-2">
+              <div className="pt-2 border-t border-gray-100/50 dark:border-gray-700/30 mt-2 flex flex-col space-y-2">
                 {/* Mobile Auth Buttons */}
                 <div className="pt-2">
                   {!user ? (
@@ -402,7 +404,7 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
                         setIsMobileMenuOpen(false);
                         onLoginClick();
                       }}
-                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-medium text-center shadow-md active:scale-95 transition-all font-['Cambria_Math']"
+                      className="w-full px-4 py-3 bg-gradient-to-r from-blue-600 via-purple-500 to-rose-500 text-white rounded-xl font-medium text-center shadow-md shadow-purple-500/20 active:scale-95 transition-all font-['Cambria_Math']"
                     >
                       Login
                     </button>
@@ -416,9 +418,9 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
 
           {/* Mobile Profile Dropdown */}
           {isProfileDropdownOpen && user && (
-            <div ref={mobileProfileRef} className="absolute top-full right-4 md:hidden bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 min-w-[220px] z-50 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div ref={mobileProfileRef} className="absolute top-full right-4 md:hidden bg-white/90 dark:bg-gray-900/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/30 p-4 min-w-[220px] z-50 animate-in fade-in slide-in-from-top-4 duration-300">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-lg font-bold">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-purple-500/20">
                   {user.name?.charAt(0) || user.email?.charAt(0) || "U"}
                 </div>
                 <div className="flex-1">
@@ -442,10 +444,10 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
           )}
 
           {/* Authentication Buttons (Desktop) */}
-          <div className="hidden md:flex items-center space-x-3 lg:space-x-10">
+          <div className="hidden md:flex items-center space-x-3 lg:space-x-6">
             {/* Show user profile button when signed in */}
             {user ? (
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3">
                 <div className="flex flex-col items-end">
                   <span className="text-[10px] font-bold text-gray-900 dark:text-gray-100 font-['Cambria_Math']">{user.name || 'User'}</span>
                   <button
@@ -455,10 +457,10 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
                     Logout
                   </button>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 via-purple-500 to-red-400 p-0.5 shadow-lg group relative">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 via-purple-500 to-rose-500 p-0.5 shadow-lg shadow-purple-500/20 group relative hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-300">
                   <button
                     onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
-                    className="w-full h-full rounded-full bg-white dark:bg-gray-800 flex items-center justify-center overflow-hidden hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 hover:scale-110 active:scale-95"
+                    className="w-full h-full rounded-full bg-white dark:bg-gray-900 flex items-center justify-center overflow-hidden hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300 hover:scale-105 active:scale-95"
                   >
                     {false ? (
                       <img
@@ -476,11 +478,11 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
 
                   {/* Profile Dropdown */}
                   {(isProfileDropdownOpen || profileDropdownClosing) && (
-                    <div ref={profileDropdownRef} className={`absolute top-full right-0 mt-2 w-96 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 p-6 z-50 ${profileDropdownClosing ? 'animate-popOut' : 'animate-in fade-in slide-in-from-top-2 duration-200'
+                    <div ref={profileDropdownRef} className={`absolute top-full right-0 mt-2 w-96 bg-white/90 dark:bg-gray-900/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-white/20 dark:border-gray-700/30 p-6 z-50 ${profileDropdownClosing ? 'animate-popOut' : 'animate-in fade-in slide-in-from-top-2 duration-200'
                       }`}>
-                      <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200/50 dark:border-gray-700/30">
                         <div className="flex items-center space-x-3 flex-1">
-                          <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                          <div className="relative w-12 h-12 rounded-full overflow-hidden shadow-lg shadow-purple-500/20">
                             {false ? (
                               <img
                                 src={user.profileImage}
@@ -504,7 +506,7 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
                         </div>
                         <button
                           onClick={handleCloseProfileDropdown}
-                          className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 ml-2"
+                          className="p-1.5 rounded-xl hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-all duration-200 ml-2"
                           aria-label="Close profile"
                         >
                           <X size={16} className="text-gray-700 dark:text-gray-100 hover:text-gray-900 dark:hover:text-white" />
@@ -523,29 +525,29 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
 
 
                       <div className="space-y-2">
-                        <div className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <div className="flex items-center justify-between py-2.5 px-3 bg-gray-50/80 dark:bg-gray-800/40 rounded-xl border border-transparent hover:border-gray-200/50 dark:hover:border-gray-700/30 transition-all duration-300">
                           <span className="text-sm text-gray-600 dark:text-gray-300 font-['Cambria_Math']">Account Type</span>
                           <span className="text-sm font-medium text-gray-900 dark:text-white font-['Cambria_Math']">Free</span>
                         </div>
-                        <div className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <div className="flex items-center justify-between py-2.5 px-3 bg-gray-50/80 dark:bg-gray-800/40 rounded-xl border border-transparent hover:border-gray-200/50 dark:hover:border-gray-700/30 transition-all duration-300">
                           <span className="text-sm text-gray-600 dark:text-gray-300 font-['Cambria_Math']">Joined</span>
                           <span className="text-sm font-medium text-gray-900 dark:text-white font-['Cambria_Math']">
                             {new Date(user.createdAt || Date.now()).toLocaleDateString()}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between py-2 px-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <div className="flex items-center justify-between py-2.5 px-3 bg-gray-50/80 dark:bg-gray-800/40 rounded-xl border border-transparent hover:border-gray-200/50 dark:hover:border-gray-700/30 transition-all duration-300">
                           <span className="text-sm text-gray-600 dark:text-gray-300 font-['Cambria_Math']">AI Interactions</span>
                           <span className="text-sm font-medium text-gray-900 dark:text-white font-['Cambria_Math']">∞</span>
                         </div>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <div className="mt-4 pt-3 border-t border-gray-200/50 dark:border-gray-700/30">
                         <button
                           onClick={() => {
                             setIsProfileDropdownOpen(false);
                             onLogout();
                           }}
-                          className="w-full flex items-center justify-center space-x-2 px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
+                          className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 bg-red-50/80 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-300 hover:scale-[1.02] active:scale-95"
                         >
                           <LogOut size={16} />
                           <span className="text-sm font-medium font-['Cambria_Math']">Logout</span>
@@ -558,7 +560,7 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
             ) : (
               <button
                 onClick={onLoginClick}
-                className="px-8 py-2.5 bg-gradient-to-r from-blue-600 via-purple-500 to-red-400 text-white font-semibold rounded-full hover:shadow-lg hover:shadow-purple-500/20 hover:scale-105 active:scale-95 transition-all duration-300 font-['Cambria_Math']"
+                className="px-6 py-2 bg-gradient-to-r from-blue-600 via-purple-500 to-rose-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-purple-500/20 hover:scale-105 active:scale-95 transition-all duration-300 font-['Cambria_Math'] text-sm btn-shine"
               >
                 Login
               </button>
@@ -566,7 +568,7 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
           </div>
         </nav>
 
-        {/* New Day/Night Toggle from Uiverse.io */}
+        {/* Creative Day/Night Toggle — Cosmic Pill */}
         <div className="theme-toggle-wrapper">
           <input
             className="input"
@@ -594,22 +596,22 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
       {/* Image Cropping Modal - Centered on Whole Page */}
       {isCroppingImage && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-[9999] flex items-center justify-center p-4 overflow-y-auto" onMouseMove={handleCropMouseMove} onMouseUp={handleCropMouseUp} onMouseLeave={handleCropMouseUp}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 my-auto transform scale-100 animate-in fade-in zoom-in-95 duration-300 border border-gray-200 dark:border-gray-700">
+          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-2xl rounded-2xl shadow-2xl max-w-md w-full p-6 my-auto transform scale-100 animate-in fade-in zoom-in-95 duration-300 border border-white/20 dark:border-gray-700/30">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold bg-gradient-to-r from-blue-600 via-purple-500 to-red-400 text-transparent bg-clip-text text-center flex-1 font-['Cambria_Math']">Crop Profile Picture</h3>
+              <h3 className="text-lg font-semibold bg-gradient-to-r from-blue-600 via-purple-500 to-rose-500 text-transparent bg-clip-text text-center flex-1 font-['Cambria_Math']">Crop Profile Picture</h3>
               <button
                 onClick={() => {
                   setIsCroppingImage(false);
                   setCropImageSrc(null);
                 }}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ml-2"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800/50 rounded-xl transition-colors ml-2"
               >
                 <CloseIcon size={20} className="text-gray-500" />
               </button>
             </div>
 
             <div className="relative mb-6">
-              <div ref={cropContainerRef} className="relative w-80 h-64 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden cursor-move user-select-none" onMouseDown={(e) => handleCropMouseDown(e, null)}>
+              <div ref={cropContainerRef} className="relative w-80 h-64 bg-gray-100 dark:bg-gray-800/50 rounded-xl overflow-hidden cursor-move user-select-none" onMouseDown={(e) => handleCropMouseDown(e, null)}>
                 {cropImageSrc && (
                   <img
                     src={cropImageSrc}
@@ -672,7 +674,7 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
             <div className="flex gap-3">
               <button
                 onClick={() => setCropArea({ x: 64, y: 64, width: 128, height: 128 })}
-                className="px-3 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-all duration-300 text-sm hover:scale-105 active:scale-95 hover:shadow-md"
+                className="px-3 py-2 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all duration-300 text-sm hover:scale-105 active:scale-95 hover:shadow-md"
               >
                 Reset
               </button>
@@ -681,14 +683,14 @@ const Navbar = ({ darkMode, toggleDarkMode, isVisible, user, setUser, onLogout, 
                   setIsCroppingImage(false);
                   setCropImageSrc(null);
                 }}
-                className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 hover:scale-105 active:scale-95"
+                className="flex-1 px-4 py-2 bg-gray-200/80 dark:bg-gray-700/50 text-gray-800 dark:text-gray-200 rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 hover:scale-[1.02] active:scale-95"
               >
                 Cancel
               </button>
               <button
                 onClick={handleCropComplete}
                 disabled={isUploadingImage}
-                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105 active:scale-95 hover:shadow-lg hover:shadow-blue-500/30 disabled:hover:scale-100"
+                className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 hover:shadow-lg hover:shadow-blue-500/30 disabled:hover:scale-100"
               >
                 {isUploadingImage ? (
                   <>
@@ -720,14 +722,14 @@ const NavItem = ({ icon, text, href, onClick }) => {
         }
         if (onClick) onClick(e);
       }}
-      className="flex items-center space-x-2 cursor-pointer text-gray-700 dark:text-gray-300 font-medium hover:text-purple-600 dark:hover:text-purple-400 group transition-all duration-300 font-['Cambria_Math']"
+      className="flex items-center space-x-2 cursor-pointer text-gray-700 dark:text-gray-300 font-medium hover:text-purple-600 dark:hover:text-purple-400 group transition-all duration-300 font-['Cambria_Math'] text-sm"
     >
-      <span className="p-1.5 rounded-xl bg-gray-100/80 dark:bg-gray-700/80 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-lg group-hover:shadow-purple-500/20 transition-all duration-300 shadow-sm group-hover:bg-gradient-to-br group-hover:from-purple-100 group-hover:to-blue-100 dark:group-hover:from-purple-900/50 dark:group-hover:to-blue-900/50">
+      <span className="p-1.5 rounded-xl bg-gray-100/60 dark:bg-gray-800/40 group-hover:scale-110 group-hover:rotate-6 group-hover:shadow-lg group-hover:shadow-purple-500/10 transition-all duration-300 shadow-sm group-hover:bg-gradient-to-br group-hover:from-purple-50 group-hover:to-blue-50 dark:group-hover:from-purple-900/30 dark:group-hover:to-blue-900/30">
         {icon}
       </span>
       <span className="relative overflow-hidden group">
         {text}
-        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 via-purple-500 to-red-400 group-hover:w-full transition-all duration-300"></span>
+        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 via-purple-500 to-rose-500 group-hover:w-full transition-all duration-300 rounded-full"></span>
       </span>
     </Link>
   );

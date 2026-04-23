@@ -8,6 +8,8 @@ EzStudy is an AI-powered learning platform (React + Vite) that provides an intel
 - **Document Analysis**: Upload and analyze PDF, DOC, PPT files with AI-powered summarization
 -- **Chat History Persistence**: Save and restore conversations across sessions (localStorage)
 -- **User Authentication**: Local auth modal (sample). Credentials are hashed client-side and only masked user info is stored in `localStorage`.
+- **Chat History Persistence**: Save and restore conversations across sessions using MongoDB Atlas, with localStorage fallback
+- **User Authentication**: Manual sign in/sign up and Google sign in/sign up backed by MongoDB Atlas
 - **Responsive Design**: Modern, mobile-friendly interface built with Tailwind CSS with special optimizations for mobile
 - **Smooth Navigation**: Elegant 1.5-second smooth scroll animation when clicking EzStudy logo
 - **Gradient UI Effects**: Beautiful gradient color effects on EzStudy branding throughout the app
@@ -19,9 +21,9 @@ EzStudy is an AI-powered learning platform (React + Vite) that provides an intel
 ## 🔧 Technologies Used
 - **Frontend**: React (Functional Components), Vite, Tailwind CSS, Lucide React icons
 - **Routing**: React Router DOM for SPA navigation
--- **Backend Integration**: Express.js API integration with Google Gemini (primary) and Groq fallback
+- **Backend Integration**: Express.js API integration with Google Gemini (primary) and Groq fallback
 - **AI/ML**: Groq API (Llama 3.3 70B model) for chat completions and document analysis
-- **Authentication**: Clerk for user management
+- **Authentication**: Custom auth backed by MongoDB Atlas and Google OAuth
 - **Markdown Rendering**: React Markdown with GitHub Flavored Markdown support
 - **Animations**: CSS animations (popOut, fadeIn, smooth scroll) and Tailwind transitions
 - **State Management**: React Hooks (useState, useEffect, useRef, useContext)
@@ -55,16 +57,17 @@ npm start    # or `node server.js`
 
 ```env
 VITE_BACKEND_URL=http://localhost:3001
+VITE_GOOGLE_CLIENT_ID=your_google_oauth_client_id
 ```
 
-4. Important backend env variables (see backend README): `GROQ_API_KEY` (required), `GOOGLE_GEMINI_API_KEY` (optional), `WEATHER_API_KEY`, `DEFAULT_LOCATION`.
+4. Important backend env variables (see backend README): `GROQ_API_KEY` (required), `MONGODB_URI` (required), `MONGODB_DB_NAME=EzStudyDB` (recommended), `GOOGLE_CLIENT_ID` (required for Google auth).
 
 ## 🚀 Usage
-1. Open the app and sign in using the authentication modal (local sample).
+1. Open the app and sign in using the authentication modal or Google button.
 2. Click "Go to AI Learning Console" to access the main interface.
 3. Upload documents for AI analysis or start chatting with the AI assistant.
 4. Create multiple chat sessions and switch between them.
-5. Chat history is persisted in `localStorage` per user id; stored credentials are not saved in plaintext.
+5. Chat history is persisted in MongoDB Atlas per user id; localStorage is only used as a fallback cache.
 
 ## 🤝 Contribution
 We welcome contributions! Here's how you can contribute:

@@ -202,7 +202,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-950">
+    <div className="min-h-screen bg-white dark:bg-[#0a0a1a]">
       {/* Auth Modal */}
       <AuthModal
         key={authKey}
