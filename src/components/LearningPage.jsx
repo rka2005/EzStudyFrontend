@@ -646,7 +646,7 @@ const LearningPage = ({ user, onLogout }) => {
   );
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-[#0a0a1a] overflow-hidden font-['Inter'] transition-colors duration-500">
+    <div className="ai-console-shell flex h-screen bg-gray-50 dark:bg-[#0a0a1a] overflow-hidden font-['Inter'] transition-colors duration-500">
       {/* Hidden File Input */}
       <input
         type="file"
@@ -805,7 +805,7 @@ const LearningPage = ({ user, onLogout }) => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-[#0a0a1a] relative overflow-hidden">
+      <div className="ai-main-panel flex-1 flex flex-col min-w-0 bg-white dark:bg-[#0a0a1a] relative overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
           <div className="absolute top-20 right-10 w-[400px] h-[400px] bg-gradient-to-br from-indigo-400/[0.03] to-purple-400/[0.03] dark:from-indigo-500/[0.04] dark:to-purple-500/[0.04] rounded-full blur-3xl animate-float-slow"></div>
@@ -853,7 +853,7 @@ const LearningPage = ({ user, onLogout }) => {
           {/* Main Content Render */}
           <div
             ref={chatContainerRef}
-            className="flex-1 overflow-y-auto px-3 py-4 md:px-10 lg:px-20"
+            className="ai-chat-canvas flex-1 overflow-y-auto px-3 py-4 md:px-10 lg:px-20"
           >
             {activeTab === 'chat' && (
               <div className="max-w-4xl mx-auto w-full">
@@ -933,8 +933,8 @@ const LearningPage = ({ user, onLogout }) => {
                         className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"} animate-fadeIn group`}
                       >
                         <div className={`max-w-[95%] md:max-w-[85%] relative ${message.sender === "user"
-                          ? "bg-gradient-to-br from-indigo-50/60 to-purple-50/40 dark:from-indigo-950/20 dark:to-purple-950/10 border border-indigo-100/60 dark:border-indigo-800/20 rounded-2xl rounded-br-md p-4 shadow-sm"
-                          : "w-full"
+                          ? "ai-user-message-card bg-gradient-to-br from-indigo-50/60 to-purple-50/40 dark:from-indigo-950/20 dark:to-purple-950/10 border border-indigo-100/60 dark:border-indigo-800/20 rounded-2xl rounded-br-md p-4 shadow-sm"
+                          : "ai-assistant-message-card w-full"
                           }`}>
                           {message.sender === "ai" && (
                             <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-gray-100/50 dark:border-gray-800/30">
@@ -987,7 +987,7 @@ const LearningPage = ({ user, onLogout }) => {
                   {/* Loading indicator */}
                   {isLoading && (
                     <div className="flex justify-start animate-fadeIn">
-                      <div className="flex items-center space-x-2 px-4 py-3">
+                      <div className="ai-loading-chip flex items-center space-x-2 px-4 py-3">
                         <div className="w-6 h-6 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
                           <BookOpen size={12} />
                         </div>
@@ -1053,7 +1053,7 @@ const LearningPage = ({ user, onLogout }) => {
               <div className="max-w-3xl mx-auto relative">
                 <form
                   onSubmit={handleSendMessage}
-                  className={`relative flex items-end transition-all duration-500 rounded-2xl border outline-none focus:outline-none ${compactChat ? 'py-2 px-3' : ''} ${isLoading
+                  className={`ai-chat-input-shell relative flex items-end transition-all duration-500 rounded-2xl border outline-none focus:outline-none ${compactChat ? 'py-2 px-3' : ''} ${isLoading
                     ? 'bg-gray-50/80 dark:bg-gray-900/40 border-gray-100 dark:border-gray-800/30'
                     : 'bg-white/80 dark:bg-gray-900/50 backdrop-blur-xl border-gray-200/50 dark:border-gray-700/30 shadow-lg shadow-black/[0.03] dark:shadow-black/20 focus-within:shadow-xl focus-within:shadow-indigo-500/[0.05] dark:focus-within:shadow-indigo-500/[0.08] focus-within:border-indigo-200 dark:focus-within:border-indigo-800/40'
                     }`}

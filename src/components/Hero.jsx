@@ -1,15 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { ArrowRight, Zap, Clock, Target, Bot, Sparkles, BookOpen, Brain } from "lucide-react";
 
-const TYPEWRITER_WORDS = ["AI-Powered Learning", "Smarter Study Plans", "Personalized Insights", "Interactive Quizzes"];
-
 const Hero = ({ onDemoClick, isReady, user, onLoginClick, onSignupClick }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [typewriterIndex, setTypewriterIndex] = useState(0);
-  const [typewriterText, setTypewriterText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
   const handleGoToConsole = () => {
@@ -22,33 +17,6 @@ const Hero = ({ onDemoClick, isReady, user, onLoginClick, onSignupClick }) => {
       return () => clearTimeout(timer);
     }
   }, [isReady]);
-
-  // Typewriter effect
-  useEffect(() => {
-    const currentWord = TYPEWRITER_WORDS[typewriterIndex];
-    let timeout;
-
-    if (!isDeleting) {
-      if (typewriterText.length < currentWord.length) {
-        timeout = setTimeout(() => {
-          setTypewriterText(currentWord.slice(0, typewriterText.length + 1));
-        }, 80);
-      } else {
-        timeout = setTimeout(() => setIsDeleting(true), 2000);
-      }
-    } else {
-      if (typewriterText.length > 0) {
-        timeout = setTimeout(() => {
-          setTypewriterText(typewriterText.slice(0, -1));
-        }, 40);
-      } else {
-        setIsDeleting(false);
-        setTypewriterIndex((prev) => (prev + 1) % TYPEWRITER_WORDS.length);
-      }
-    }
-
-    return () => clearTimeout(timeout);
-  }, [typewriterText, isDeleting, typewriterIndex]);
 
   return (
     <section className="w-full min-h-screen lg:h-screen flex flex-col lg:flex-row items-center justify-center text-center lg:text-left bg-gradient-to-br from-slate-50 via-white to-blue-50/80 dark:from-gray-950 dark:via-[#0a0a1a] dark:to-indigo-950/50 px-4 sm:px-6 lg:px-16 pt-32 pb-12 lg:py-0 overflow-hidden relative noise-overlay">
@@ -94,9 +62,8 @@ const Hero = ({ onDemoClick, isReady, user, onLoginClick, onSignupClick }) => {
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-[1.1] max-w-2xl font-['Cambria_Math']">
           <span className="text-gray-900 dark:text-white">Unlock </span>
           <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-rose-500 text-transparent bg-clip-text">
-            {typewriterText}
+            AI Powered Learning
           </span>
-          <span className="typewriter-cursor"></span>
         </h1>
 
         <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-xl font-['Cambria_Math'] font-medium leading-relaxed">
