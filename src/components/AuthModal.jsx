@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { X, Mail, Lock, User, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { apiFetch } from '../utils/apiClient';
 
 const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) => {
     const [mode, setMode] = useState(initialMode); // 'signin' or 'signup'
@@ -13,7 +14,6 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
     const [passwordStrength, setPasswordStrength] = useState({ score: 0, feedback: [] });
     const googleButtonRef = useRef(null);
     const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || '';
 
     // Password strength validation
     const validatePassword = (password) => {
@@ -113,7 +113,7 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
                 throw new Error('Google sign in failed. Missing credential.');
             }
 
-            const response = await fetch(`${API_BASE_URL}/api/auth/google`, {
+            const response = await apiFetch('/api/auth/google', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -199,7 +199,7 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'signin' }) =
                 ? { name: name.trim(), email: emailNormalized, passwordHash }
                 : { email: emailNormalized, passwordHash };
 
-            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            const response = await apiFetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
