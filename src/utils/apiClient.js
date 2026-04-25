@@ -17,8 +17,13 @@ const getBackendCandidates = () => {
   const deployed = trimTrailingSlash(import.meta.env.VITE_BACKEND_URL);
   const local = trimTrailingSlash(import.meta.env.VITE_LOCAL_BACKEND_URL || DEFAULT_LOCAL_BACKEND);
 
-  const ordered = isLocalFrontend() ? [local, deployed] : [deployed, local];
-  return [...new Set(ordered.filter(Boolean))];
+  if (isLocalFrontend()) {
+    // On local frontend, try local first, then deployed
+    return [local, deployed].filter(Boolean);
+  } else {
+    // On production, ONLY use deployed backend - never try localhost
+    return deployed ? [deployed] : [];
+  }
 };
 
 const withTimeoutSignal = (timeoutMs) => {
