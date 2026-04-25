@@ -25,6 +25,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { apiFetch } from "../utils/apiClient";
 
 // Sub-components moved to top to avoid initialization errors
 const StatCard = ({ label, value, sub, color }) => {
@@ -59,7 +60,6 @@ const SidebarLink = ({ active, onClick, icon, label, collapsed }) => (
 const LearningPage = ({ user, onLogout }) => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("chat"); // 'chat', 'docs', 'stats'
-  const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || '';
 
   // Use user-specific keys for localStorage to ensure separation
   // Prefer non-sensitive `id` when available. Do NOT use email/username (PII) or credentials.
@@ -219,7 +219,7 @@ const LearningPage = ({ user, onLogout }) => {
       setIsHydratingChats(true);
 
       try {
-        const response = await fetch(`${API_BASE_URL}/api/chats/${user.id}`);
+        const response = await apiFetch(`/api/chats/${user.id}`);
         if (!response.ok) {
           const errorData = await response.json().catch(() => ({}));
           throw new Error(errorData.error || `Failed to load chats (${response.status})`);
@@ -294,7 +294,7 @@ const LearningPage = ({ user, onLogout }) => {
     return () => {
       cancelled = true;
     };
-  }, [user?.id, API_BASE_URL, CHAT_HISTORY_KEY, ACTIVE_CHAT_KEY, FILES_KEY]);
+  }, [user?.id, CHAT_HISTORY_KEY, ACTIVE_CHAT_KEY, FILES_KEY]);
 
   // Persist storedFiles metadata per user
   useEffect(() => {
@@ -311,7 +311,7 @@ const LearningPage = ({ user, onLogout }) => {
 
     const timeoutId = setTimeout(async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/chats/${user.id}`, {
+        const response = await apiFetch(`/api/chats/${user.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -346,7 +346,7 @@ const LearningPage = ({ user, onLogout }) => {
     }, 450);
 
     return () => clearTimeout(timeoutId);
-  }, [chatHistory, currentChatId, CHAT_HISTORY_KEY, ACTIVE_CHAT_KEY, API_BASE_URL, user?.id, isHydratingChats]);
+  }, [chatHistory, currentChatId, CHAT_HISTORY_KEY, ACTIVE_CHAT_KEY, user?.id, isHydratingChats]);
 
   // Scroll to bottom when messages update
   useEffect(() => {
@@ -479,13 +479,10 @@ const LearningPage = ({ user, onLogout }) => {
     });
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/chat`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await apiFetch('/api/chat', {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -549,13 +546,10 @@ const LearningPage = ({ user, onLogout }) => {
     }
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/chat`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await apiFetch('/api/chat', {
+        method: "POST",
+        body: formData,
+      });
 
       if (!response.ok) {
         const errorData = await response.json();

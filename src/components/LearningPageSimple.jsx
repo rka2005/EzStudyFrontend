@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Bot, Home, LogOut, Upload, X, Send, FileText, Image, Play, Loader, Copy, Check } from "lucide-react";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { apiFetch } from '../utils/apiClient';
 
 const LearningPageSimple = ({ setShowLearningPage, user, onLogout }) => {
     const initialMessages = [
@@ -107,8 +108,6 @@ const LearningPageSimple = ({ setShowLearningPage, user, onLogout }) => {
         setIsLoading(true);
 
         try {
-            const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:3001";
-
             // Create FormData for multipart upload
             const formData = new FormData();
 
@@ -130,7 +129,7 @@ const LearningPageSimple = ({ setShowLearningPage, user, onLogout }) => {
                 formData.append('files', file.file, file.name);
             });
 
-            const response = await fetch(`${backendUrl}/api/chat`, {
+            const response = await apiFetch('/api/chat', {
                 method: "POST",
                 body: formData,
             });
